@@ -1,0 +1,315 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="AdminMaster.master.cs" Inherits="E_Granthalaya.AdminMaster" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta charset="utf-8" />
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <link rel="shortcut icon" href="assets/images/logo.jpg" type="image/png" />
+    <meta name="author" content="" />
+    <link href="assets/css/styles.css" rel="stylesheet" />
+    <script src="assets/js/bootstrap-5.2.3.bundle.min.js"></script>
+    <script src="assets/js/fontawesome-all.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/sweetalert.js"></script>
+    <script src="https://libraria-prod.s3.us-west-1.amazonaws.com/public/embed-popup.js"></script>
+    <%--<script src="assets/js/jquery.numeric.js"></script>--%>
+
+    <%--Toaster Notification--%>
+    <link href="assets/css/toastr.min.css" rel="stylesheet" />
+    <script src="assets/js/jquery-2.1.1.min.js"></script>
+    <script src="assets/js/toastr-2.0.2.min.js"></script>
+    <%--End Toaster Notification--%>
+
+    <%--DataTable--%>
+    <link href="assets/css/dataTables-2.0.5.bootstrap5.css" rel="stylesheet" />
+    <script src="assets/js/dataTables-2.0.5.js"></script>
+    <script src="assets/js/dataTables.bootstrap5-2.0.5.js"></script>
+    <%--DataTable End--%>
+    <script type="text/javascript">
+        //window.history.forward();
+        //function noBack() {
+        //    window.history.forward();
+        //}
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+        });
+        $(window).ready(function () {
+            $(".g-loader-container").delay(400).fadeOut("slow");
+        });
+    </script>
+    <style>
+        .g-loader-container{
+  	  position: fixed;
+  	  z-index: 2000;
+  	  left: 0;
+  	  right: 0;
+  	  top: 0;
+  	  width: 100%;
+  	  height: 100%;
+  	  background: #fff;	
+}
+.g-loader {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.g-circular {
+  animation: rotate 2s linear infinite;
+  height: 100px;
+  position: relative;
+  width: 100px;
+}
+.g-path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+  stroke-linecap: round;
+}
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124;
+  }
+}
+@keyframes color {
+  100%, 0% {
+    stroke: #d62d20;
+  }
+  40% {
+    stroke: #0057e7;
+  }
+  66% {
+    stroke: #008744;
+  }
+  80%, 90% {
+    stroke: #ffa700;
+  }
+}
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body class="sb-nav-fixed">
+   
+    <form id="form1" runat="server">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark" style="background-color: #000c1f">
+            <a class="navbar-brand ps-3" href="#">E-Granthalaya</a>
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <%--<div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+            </div>--%>
+            </div>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-user fa-fw me-1"></i>
+                        <asp:Label ID="lbl_name" runat="server" Text=""></asp:Label>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <asp:LinkButton ID="btnLogout" Text="Logout" OnClick="btnLogout_Click" class="dropdown-item" CauseValidation="false" runat="server" /></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" style="background-color: #000c1f" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <asp:Panel ID="dashbord_pnl" runat="server" Visible="false">
+                                <div class="sb-sidenav-menu-heading">Core</div>
+                                <a class="nav-link" href="Adm_Dashboard.aspx">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    Dashboard
+                                </a>
+                            </asp:Panel>
+                            <!-- Links for Assistant Professors -->
+                            <asp:Panel ID="AssistantProfessorPanel" runat="server" Visible="false">
+                                <div class="sb-sidenav-menu-heading">Assistant Professor</div>
+                                <div class="sb-sidenav-menu">
+                                    <a class="nav-link" href="Faculty_Dashboard.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-book"></i></div>
+                                        Dashboard
+                                    </a>
+                                    <a class="nav-link" href="Fac_BookRequest.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-book"></i></div>
+                                        Book Request
+                                    </a>
+                                    <a class="nav-link" href="Adm_ContentMaster.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-list"></i></div>
+                                        Upload Contents
+                                    </a>
+                                </div>
+                            </asp:Panel>
+                            <!-- Links for Office -->
+                            <asp:Panel ID="OfficePnl" runat="server" Visible="false">
+                                <div class="sb-sidenav-menu-heading">Office</div>
+                                <div class="sb-sidenav-menu">
+                                    <a class="nav-link" href="Faculty_Dashboard.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-book"></i></div>
+                                        Dashboard
+                                    </a>
+                                    <a class="nav-link" href="Fac_BookRequest.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-book"></i></div>
+                                        Book Request
+                                    </a>
+                                </div>
+                            </asp:Panel>
+                            <!-- Links for Assistant Librarian -->
+                            <asp:Panel ID="AssLibrarianPnl" runat="server" Visible="false">
+                                <div class="sb-sidenav-menu-heading">Library Clerk</div>
+                                <div class="sb-sidenav-menu">
+                                    <a class="nav-link" href="Adm_BookIssue.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-list"></i></div>
+                                        Issue Books
+                                    </a>
+                                    <a class="nav-link" href="Adm_BookReturn.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-list"></i></div>
+                                        Return Books
+                                    </a>
+                                </div>
+                            </asp:Panel>
+                            <!-- Links for Peon-->
+                            <asp:Panel ID="PeonPanel" runat="server" Visible="false">
+                                <div class="sb-sidenav-menu-heading">Library</div>
+                                <div class="sb-sidenav-menu">
+                                    <a class="nav-link" href="Adm_BookIssue.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-list"></i></div>
+                                        Issue Books
+                                    </a>
+                                    <a class="nav-link" href="Adm_BookReturn.aspx">
+                                        <div class="sb-nav-link-icon"><i class="fa fa-solid fa-list"></i></div>
+                                        Return Books
+                                    </a>
+                                </div>
+                            </asp:Panel>
+                            <!-- Links for Librarian -->
+                            <asp:Panel ID="LibrarianHead" runat="server">
+                                <div class="sb-sidenav-menu-heading">Librarian</div>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts2">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-book"></i></div>
+                                    Library
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts2" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <%--<a class="nav-link" href="Fac_BookRequest.aspx">Fac. Book Request</a>--%>
+                                        <a class="nav-link" href="Adm_BookIssue.aspx">Book Issue</a>
+                                        <a class="nav-link" href="Adm_BookReturn.aspx">Book Return</a>
+                                        <a class="nav-link" href="Adm_ContentMaster.aspx">Add Content</a>
+                                    </nav>
+                                </div>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+                                    Entries
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="Adm_AddBook.aspx">Add New Book</a>
+                                        <a class="nav-link" href="Adm_EditBookMaster.aspx">Edit Books</a>
+                                        <a class="nav-link" href="Adm_AddSubscription.aspx">Add Subscription</a>
+                                        <a class="nav-link" href="Adm_SubscriptionEntry.aspx">Add Subscription Entry</a>
+                                        <a class="nav-link" href="Adm_HolidaysMaster.aspx">Add Holiday</a>
+                                        <a class="nav-link" href="Adm_TimeSlot.aspx">Add Time Slot</a>
+                                    </nav>
+                                </div>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts4" aria-expanded="false" aria-controls="collapseLayouts">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
+                                    Reports
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts4" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="Adm_Report.aspx">Get Reports</a>
+                                    </nav>
+                                </div>
+                                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts1">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                    Utilities
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="Adm_Limits.aspx">User Limits</a>
+                                        <a class="nav-link" href="Adm_CarryForward.aspx">Carry Forward</a>
+                                        <a class="nav-link" href="Adm_EGSubjectMaster.aspx">EG Subject-Link</a>
+                                    </nav>
+                                </div>
+                            </asp:Panel>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer" style="background-color: #10223e">
+                        <div class="small">Logged in as:</div>
+                        <b style="color: silver;">
+                            <asp:Label ID="lbl_designation" runat="server" Text=""></asp:Label>
+                        </b>
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </main>
+                <footer class="py-2 mt-auto" style="background-color: #bcc8de; font-weight: 700">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text text-muted">Copyright &copy; E-Granthalaya 2023</div>
+                            <div class="text text-muted">
+                                <a href="#">Privacy Policy</a>
+                                &middot;<a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
